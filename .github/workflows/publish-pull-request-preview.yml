@@ -63,7 +63,7 @@ jobs:
           publish-dir: '.'
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: "You can test out these proposed changes!"
-          alias: pr-${{ env.PR_NUM }}
+          alias: pr-${{ env.PR_NUMBER }}
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
@@ -86,7 +86,7 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@master
         with:
-          args: '🎉 Test build for PR#${{env.PR_NUM}} ✨👉 ${{steps.netlify-deploy.outputs.deploy-url}} 👈✨'
+          args: '🎉 Test build for PR#${{env.PR_NUMBER}} ✨👉 ${{steps.netlify-deploy.outputs.deploy-url}} 👈✨'
       - uses: Eomm/why-don-t-you-tweet@v1
         if: ${{ env.PR_ACTION == 'opened' }}
         with:

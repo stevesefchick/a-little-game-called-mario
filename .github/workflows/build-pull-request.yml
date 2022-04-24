@@ -16,6 +16,7 @@ on:
 
 jobs:
   build_game:
+    if: ${{ (github.event.action == 'synchronize' && github.event.label.name != 'skip preview') || github.event.action != 'synchronize' }}
     runs-on: ubuntu-latest
     steps:
       - name: checkout latest code
@@ -24,20 +25,10 @@ jobs:
         uses: actions/github-script@v3
         with:
           script: |
-            var fs = require('fs');
-            var response = await github.repos.listContributors({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              per_page: 100
-            });
-            var names = '';
-            for (const contributor of response.data) {
-              if (contributor.type == 'User') {
-                names += contributor.login + '\n';
-              }
-            }
-            fs.writeFileSync('credits.txt', names);
-      - name: export with Godot Engine and release on GitHub
+            const path = require('path');
+            const script = require(path.resolve('.github/workflows/update-credits.js'));
+            await script(github, context)
+      - name: export with Godot Engine
         uses: firebelley/godot-export@v3.0.0
         with:
           create_release: false
